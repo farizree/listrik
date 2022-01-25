@@ -59,10 +59,10 @@
                         <label class="col-sm-3 col-form-label">Tarif</label>
                         <div class="col-sm-9">
                         <select class="form-control" name="tarif">
+                        <option class="dropdown-item" value="">Select Tarif & Daya</option>
                           <?php
                                 $query = mysqli_query($con, "SELECT id_tarif, tarifperkwh, daya FROM tarif");
                                     while($data = mysqli_fetch_array($query)){ ?>
-                                <option class="dropdown-item" value="">Select Tarif & Daya</option>
                                 <option class="dropdown-item" value="<?php echo $data['id_tarif']?>"><?php echo $data['tarifperkwh']?> - <?php echo $data['daya']?></option>
                             <?php } ?>
                           </select>

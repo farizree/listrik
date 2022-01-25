@@ -1,4 +1,7 @@
-<?php include ("controller/connection.php"); ?>
+<?php include ("controller/connection.php");
+session_start();
+error_reporting (E_ALL ^ E_NOTICE);
+ ?>
 <!DOCTYPE html>
 <html lang="en"> <?php include ("headfoot/header.php"); ?> <body>
     <div class="main-panel">
@@ -8,11 +11,15 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">Table Pelanggan</h4>
-                <a href="tambahpelanggan.php" class="btn btn-outline-secondary">Tambah Data</a>
+                <?php if($_SESSION['id_pelanggan']) {
+                  echo "";
+                } else {?>
+                  <a href="tambahpelanggan.php" class="btn btn-outline-secondary">Tambah Data</a>
+                <?php } ?>
                 <form method="post" action="pelanggan.php" enctype="multipart/form-data">
                     <div class="dropdown">
                         <select class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuSizeButton3" data-bs-toggle="dropdown" name="daya" id="daya">
-                        <option class="dropdown-item" value="0">Select Tarif</option>
+                        <option class="dropdown-item" value="0">Select Daya</option>
                         <?php
                                 $query = mysqli_query($con, "SELECT daya FROM tarif ORDER BY id_tarif ASC");
                                     while($data = mysqli_fetch_array($query)){ ?>
@@ -39,9 +46,11 @@
                     </thead>
                     <tbody>
                     <?php
+                     $id_pelanggan = $_SESSION['id_pelanggan'];
+                    if($_SESSION['id_pelanggan'] == "") {
                         $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
                         $no = 1;
-                        $sql = mysqli_query($con, "CALL spDayaPelanggan('$daya')");
+                        $sql = mysqli_query($con, "CALL spDayaPelanggan('$daya', '$id_pelanggan')");
                         while ($row = mysqli_fetch_array($sql)){?>    
                       <tr class="table-info"> 
                         <td><?=$no++;?></td>
@@ -55,7 +64,21 @@
                             <a class="btn btn-danger" href="controller/deletepelanggan.php?id_pelanggan=<?=$row['id_pelanggan'] ?>">Hapus</a>
                         </td>
                       </tr>
-                      <?php } ?>
+                      <?php }} else {
+                        $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
+                        $no = 1;
+                        $sql = mysqli_query($con, "CALL spDayaPelanggan('$id_pelanggan', '$id_pelanggan')");
+                        while ($row = mysqli_fetch_array($sql)){?>    
+                      <tr class="table-info"> 
+                        <td><?=$no++;?></td>
+                        <td><?php echo $row['nama_pelanggan'];?></td>
+                        <td> <?php echo $row['nomor_kwh'];?> </td>
+                        <td><?php echo $row['alamat'];?> </td>
+                        <td><?php echo $row['daya'];?> Watt</td>
+                        <td><?php echo $row['tarifperkwh'];?> </td>
+                        <td></td>
+                      </tr>
+                      <?php }}?>
                     </tbody>
                   </table>
                 </div>

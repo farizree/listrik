@@ -1,4 +1,6 @@
-<?php include ("controller/connection.php"); ?>
+<?php include ("controller/connection.php"); 
+error_reporting (E_ALL ^ E_NOTICE);
+?>
 <!DOCTYPE html>
 <html lang="en"> <?php include ("headfoot/header.php"); ?> <body>
     <div class="main-panel">
@@ -17,7 +19,11 @@
                 unset($_SESSION['status']);
                 }?>
                 <h4 class="card-title">Table Penggunaan Listrik</h4>
+                <?php if($_SESSION['id_pelanggan']) {
+                  echo "";
+                } else {?>
                 <a href="tambahpenggunaan.php" class="btn btn-outline-secondary">Tambah Data</a>
+                <?php } ?>
                 <div class="table-responsive pt-3">
                   <table class="table table-bordered">
                     <thead>
@@ -34,6 +40,8 @@
                     </thead>
                     <tbody>
                     <?php
+                     $id_pelanggan = $_SESSION['id_pelanggan'];
+                     if($_SESSION['id_pelanggan'] == "") {
                         $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
                         $no = 1;
                         $sql = mysqli_query($con, "select * from view_penggunaan");
@@ -50,9 +58,23 @@
                             <a class="btn btn-warning" href='updatepenggunaan.php?id_penggunaan=<?=$row['id_penggunaan']?>'>Edit</a>
                             <a class="btn btn-danger" href="controller/deletepenggunaan.php?id_penggunaan=<?=$row['id_penggunaan'] ?>">Hapus</a>
                         </td>
-
+                        <?php }} else { 
+                          $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
+                        $no = 1;
+                        $sql = mysqli_query($con, "select * from view_penggunaan where id_pelanggan = '$id_pelanggan'");
+                        while ($row = mysqli_fetch_array($sql)){?>    
+                      <tr class="table-info"> 
+                        <td><?=$no++;?></td>
+                        <td><?php echo $row['nama_pelanggan'];?></td>
+                        <td> <?php echo $row['nomor_kwh'];?> </td>
+                        <td><?php echo $row['meter_awal'];?> </td>
+                        <td><?php echo $row['meter_akhir'];?></td>
+                        <td><?php echo $row['bulan'];?> </td>
+                        <td><?php echo $row['tahun'];?> </td>
+                        <td>
+                        </td>
                       </tr>
-                      <?php } ?>
+                      <?php }} ?>
                     </tbody>
                   </table>
                 </div>

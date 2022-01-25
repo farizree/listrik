@@ -8,14 +8,6 @@ $bulanBayar = $_GET['total_tagihan'];
 $tanggal_pembayaran = date("Y-m-d");
 $totalBayar = $bulanBayar + $biayaAdmin;
 $iduser = $_SESSION['iduser'];
-// echo '<pre>';
-// echo $biayaAdmin;
-// echo $id_tagihan;
-// echo $id_pelanggan;
-// echo $bulanBayar;
-// echo $iduser;
-
-// die;
 
 $query = "INSERT INTO pembayaran(id_tagihan, id_pelanggan, tanggal_pembayaran, bulan_bayar, biaya_admin, total_bayar, id_user) 
 VALUES('$id_tagihan', '$id_pelanggan', '$tanggal_pembayaran', '$bulanBayar', '$biayaAdmin', '$totalBayar', '$iduser')";

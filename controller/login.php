@@ -21,6 +21,7 @@
                 $hasil = mysqli_num_rows($result);
                 $row = mysqli_fetch_assoc($result);
                
+                $idplg = $row['id_pelanggan'];
                 $usrpg = $row['username'];
                 $passpg = $row['password'];
                 $namapg = $row['nama_pelanggan'];
@@ -33,6 +34,7 @@
                 $_SESSION['nomorkwh'] = $nomorKwh;
                 $_SESSION['alamat'] = $alamat;
                 $_SESSION['idtarif'] = $idTarif;
+                $_SESSION['id_pelanggan'] = $idplg;
 
                 if(($usrpg == $username) && ($passpg == $password))
                 {

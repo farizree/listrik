@@ -20,10 +20,10 @@ $result = mysqli_fetch_assoc($query);
                         <label class="col-sm-3 col-form-label">Nama Pelanggan</label>
                         <div class="col-sm-9">
                           <select class="form-control" name="pelanggan">
+                          <option class="dropdown-item" value="">Select Nama Pelanggan</option>
                           <?php
                                 $query = mysqli_query($con, "SELECT id_pelanggan, nama_pelanggan FROM pelanggan");
                                     while($data = mysqli_fetch_array($query)){ ?>
-                                <option class="dropdown-item" value="">Select Nama Pelanggan</option>
                                 <option class="dropdown-item" value="<?php echo $data['id_pelanggan']?>"  <?php echo ($data['id_pelanggan'] ==  $result['id_pelanggan']) ? ' selected="selected"' : '';?>><?php echo $data['nama_pelanggan']?></option>
                             <?php } ?>
                           </select>

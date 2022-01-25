@@ -1,4 +1,7 @@
-<?php include ("controller/connection.php"); ?>
+<?php include ("controller/connection.php"); 
+session_start();
+error_reporting (E_ALL ^ E_NOTICE);
+?>
 <!DOCTYPE html>
 <html lang="en"> <?php include ("headfoot/header.php"); ?> <body>
     <div class="main-panel">
@@ -35,6 +38,8 @@
                     </thead>
                     <tbody>
                     <?php
+                    $id_pelanggan = $_SESSION['id_pelanggan'];
+                    if($_SESSION['id_pelanggan'] == "") {
                         $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
                         $no = 1;
                         $sql = mysqli_query($con, "SELECT * from view_tagihan_pelanggan");
@@ -57,7 +62,30 @@
                         </td>
                         <?php } ?>
                     </tr>
-                      <?php } ?>
+                      <?php }} else { 
+                          $daya = isset($_POST['daya']) ? $_POST['daya'] : '';
+                          $no = 1;
+                          $sql = mysqli_query($con, "SELECT * from view_tagihan_pelanggan where id_pelanggan = '$id_pelanggan'");
+                          while ($row = mysqli_fetch_array($sql)){?>    
+                        <tr class="table-info"> 
+                          <td><?=$no++;?></td>
+                          <td><?php echo $row['id_tagihan'];?></td>
+                          <td><?php echo $row['nama_pelanggan'];?></td>
+                          <td> <?php echo $row['nomor_kwh'];?> </td>
+                          <td><?php echo $row['bulan'];?> </td>
+                          <td><?php echo $row['tahun'];?></td>
+                          <td><?php echo $row['jumlah_meter'];?> </td>
+                          <td><?php echo $row['status'];?> </td>
+                          <td><?php echo $row['total_tagihan'];?> </td>
+                          <?php if($row['status'] == "Pembayaran Berhasil") {?>
+                              <td>Payment Completed</td>
+                          <?php } else {?>
+                          <td>
+                              <a class="btn btn-warning" href='controller/payment.php?id_tagihan=<?=$row['id_tagihan']?>&amp;id_pelanggan=<?=$row['id_pelanggan']?>&amp;total_tagihan=<?=$row['total_tagihan']?>'>Bayar</a>
+                          </td>
+                          <?php } ?>
+                      </tr>
+                        <?php }} ?>
                     </tbody>
                   </table>
                 </div>
